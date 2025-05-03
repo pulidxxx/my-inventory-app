@@ -123,7 +123,7 @@ export const DashboardTemplate: React.FC<DashboardTemplateProps> = ({
                     </button>
                 </div>
 
-                <div className="w-full bg-white rounded-lg shadow-lg shadow-sky-200 dark:border dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-500">
+                <div className="w-full bg-white rounded-lg shadow-lg dark:shadow-md shadow-sky-200 dark:border dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-500">
                     <div className="py-2 sm:pt-6">
                         <h1 className="flex items-center justify-center text-xl font-bold leading-tight tracking-tight text-sky-300 md:text-2xl dark:text-white">
                             Agrega un producto
@@ -135,7 +135,7 @@ export const DashboardTemplate: React.FC<DashboardTemplateProps> = ({
                     />
                 </div>
 
-                <div className="mt-10 p-6 w-full bg-white rounded-lg shadow-lg shadow-sky-200 dark:border dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-500">
+                <div className="mt-10 p-6 w-full bg-white rounded-lg shadow-lg dark:shadow-md shadow-sky-200 dark:border dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-500">
                     <div className="mb-6">
                         <h2 className="flex items-center text-xl font-semibold text-sky-300 dark:text-white mb-4">
                             <FaBoxes className="text-2xl mr-2 text-sky-300 dark:text-white" />

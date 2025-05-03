@@ -65,7 +65,7 @@ export const ProductList: React.FC<ProductListProps> = ({
                     {outOfStockProducts.length > 0 && (
                         <div>
                             <h3 className="flex items-center mb-3 text-lg font-semibold text-gray-700 dark:text-white">
-                                <FaExclamationTriangle className="text-md mr-2 text-white" />
+                                <FaExclamationTriangle className="text-md mr-2 text-sky-300 dark:text-white" />
                                 Agotados ({outOfStockProducts.length})
                             </h3>
                             <div className="space-y-4">
