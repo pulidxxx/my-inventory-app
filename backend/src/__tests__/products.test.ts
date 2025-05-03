@@ -19,6 +19,7 @@ describe("Product API Routes", () => {
         quantity: parseInt("10", 10),
     };
     let createdProductId: number;
+    let testUserId: string;
 
     beforeAll(async () => {
         if (!AppDataSource.isInitialized) {
@@ -37,6 +38,7 @@ describe("Product API Routes", () => {
             user.username = testUser.username;
             await userRepository.save(user);
         }
+        testUserId = user.email;
 
         authToken = jwt.sign(
             { email: testUser.email },
@@ -48,10 +50,14 @@ describe("Product API Routes", () => {
     });
 
     afterAll(async () => {
-        await AppDataSource.getRepository(Product).delete({});
-        await AppDataSource.getRepository(User).delete({
-            email: testUser.email,
+        // Primero eliminar todos los productos asociados al usuario de prueba
+        await AppDataSource.getRepository(Product).delete({
+            user: { email: testUserId },
         });
+
+        // Luego eliminar el usuario de prueba
+        await AppDataSource.getRepository(User).delete({ email: testUserId });
+
         await AppDataSource.destroy();
     });
 
@@ -60,7 +66,7 @@ describe("Product API Routes", () => {
             const product = new Product();
             Object.assign(product, testProduct);
             const user = await AppDataSource.getRepository(User).findOneOrFail({
-                where: { email: testUser.email },
+                where: { email: testUserId },
             });
             product.user = user;
             const savedProduct = await AppDataSource.getRepository(
@@ -70,7 +76,10 @@ describe("Product API Routes", () => {
         });
 
         afterAll(async () => {
-            await AppDataSource.getRepository(Product).delete({});
+            // Eliminar solo los productos creados en estos tests
+            await AppDataSource.getRepository(Product).delete({
+                user: { email: testUserId },
+            });
         });
 
         it("should return all products for authenticated user", async () => {
@@ -98,7 +107,10 @@ describe("Product API Routes", () => {
 
     describe("POST /api/v1/products", () => {
         afterEach(async () => {
-            await AppDataSource.getRepository(Product).delete({});
+            // Eliminar solo los productos creados en estos tests
+            await AppDataSource.getRepository(Product).delete({
+                user: { email: testUserId },
+            });
         });
 
         it("should create a new product with valid data", async () => {
@@ -173,7 +185,7 @@ describe("Product API Routes", () => {
             const product = new Product();
             Object.assign(product, testProduct);
             const user = await AppDataSource.getRepository(User).findOneOrFail({
-                where: { email: testUser.email },
+                where: { email: testUserId },
             });
             product.user = user;
             const savedProduct = await AppDataSource.getRepository(
@@ -183,7 +195,10 @@ describe("Product API Routes", () => {
         });
 
         afterEach(async () => {
-            await AppDataSource.getRepository(Product).delete({});
+            // Eliminar solo los productos creados en estos tests
+            await AppDataSource.getRepository(Product).delete({
+                user: { email: testUserId },
+            });
         });
 
         it("should update an existing product", async () => {
@@ -229,7 +244,7 @@ describe("Product API Routes", () => {
             const product = new Product();
             Object.assign(product, testProduct);
             const user = await AppDataSource.getRepository(User).findOneOrFail({
-                where: { email: testUser.email },
+                where: { email: testUserId },
             });
             product.user = user;
             const savedProduct = await AppDataSource.getRepository(
