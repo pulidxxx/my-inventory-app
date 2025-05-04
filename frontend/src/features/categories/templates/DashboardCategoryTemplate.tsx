@@ -136,7 +136,10 @@ export const DashboardCategoryTemplate: React.FC<
                             Agrega una categoría
                         </h1>
                     </div>
-                    <CategoryForm onCategoryCreated={onAddCategory} />
+                    <CategoryForm
+                        onCategoryCreated={onAddCategory}
+                        onShowModal={handleShowModal}
+                    />
                 </div>
                 <div className="mt-10 p-6 w-full bg-white rounded-lg shadow-lg dark:shadow-md shadow-sky-200 dark:border dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-500">
                     <div className="mb-6">

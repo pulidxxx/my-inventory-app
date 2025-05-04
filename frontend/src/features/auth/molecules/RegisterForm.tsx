@@ -70,7 +70,9 @@ export const RegisterForm: React.FC = () => {
             } catch (error) {
                 console.log(error);
                 setModalTitle("Error");
-                setModalMessage("Error al registrar usuario.");
+                setModalMessage(
+                    "Error al registrar usuario. Prueba usando otro correo."
+                );
                 setModalIcon(
                     <FaTimesCircle className="w-12 h-12 text-sky-400 dark:text-white" />
                 );

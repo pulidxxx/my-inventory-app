@@ -90,7 +90,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
             console.error("Error al editar la categoría", error);
             onShowModal(
                 "Error",
-                "No se pudo editar la categoría.",
+                "No se pudo editar la categoría, revisa que el nombre no este repetido.",
                 <FaTimesCircle className="w-12 h-12 text-red-500 dark:text-white" />
             );
         } finally {

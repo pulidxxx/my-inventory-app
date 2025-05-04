@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Input } from "../../../components/atoms/Input";
 import { Select } from "../../../components/atoms/Select";
 import { Button } from "../../../components/atoms/Button";
-import { FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
+import { FaEdit, FaTimesCircle } from "react-icons/fa";
 import { getCategories } from "../../../services/categories";
 
 interface Category {
     id: number;
     name: string;
+    isActive?: boolean;
 }
 
 interface EditProductFormProps {
@@ -114,22 +115,13 @@ export const EditProductForm: React.FC<EditProductFormProps> = ({
 
         try {
             await onEdit(name, categoryId, Number(price), Number(quantity));
-            onShowModal(
-                "Éxito",
-                "Producto actualizado correctamente.",
-                <FaCheckCircle className="w-12 h-12 text-sky-400 dark:text-white" />
-            );
             onProductUpdated();
             onClose();
         } catch (error: unknown) {
-            const errorMessage =
-                error instanceof Error
-                    ? error.message
-                    : "Error al actualizar el producto.";
             console.error("Error al actualizar el producto:", error);
             onShowModal(
                 "Error",
-                errorMessage,
+                "Revisa si tu producto ya existe.",
                 <FaTimesCircle className="w-12 h-12 text-red-500 dark:text-white" />
             );
         }
@@ -156,16 +148,25 @@ export const EditProductForm: React.FC<EditProductFormProps> = ({
                 )}
             </div>
             <div>
-                <Select
-                    options={categories.map((cat) => ({
-                        value: cat.id,
-                        label: cat.name,
-                    }))}
-                    value={categoryId}
-                    onChange={(e) => setCategoryId(Number(e.target.value))}
-                    name="category"
-                    placeholder="Selecciona una categoría"
-                />
+                {categories.filter((cat) => cat.isActive).length === 0 ? (
+                    <div className="bg-gray-50 mb-2 mt-4 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        No hay categorías activas disponibles. Por favor, crea
+                        una.
+                    </div>
+                ) : (
+                    <Select
+                        options={categories
+                            .filter((cat) => cat.isActive)
+                            .map((cat) => ({
+                                value: cat.id,
+                                label: cat.name,
+                            }))}
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(Number(e.target.value))}
+                        name="category"
+                        placeholder="Selecciona una categoría"
+                    />
+                )}
                 {errors.category && (
                     <p className="text-red-500 text-sm mt-1">
                         {errors.category}

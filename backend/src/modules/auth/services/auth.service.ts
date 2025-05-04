@@ -28,6 +28,8 @@ export class AuthService {
             return { errors };
         }
 
+        email = email.toLowerCase();
+
         const existingUser = await this.userRepository.findOneByEmail(email);
         if (existingUser) {
             return { errors: ["Error registering user"] };
@@ -48,7 +50,7 @@ export class AuthService {
         if (errors.length > 0) {
             return { errors };
         }
-
+        email = email.toLowerCase();
         const user = await this.userRepository.findOneByEmail(email);
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return { errors: ["Invalid credentials"] };

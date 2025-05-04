@@ -13,13 +13,10 @@ export class ProductRepository {
         return this.repository.findOne({ where: { name } });
     }
 
-    async findOneById(id: number, userEmail: string): Promise<Product | null> {
+    async findOneById(id: number): Promise<Product | null> {
         return this.repository.findOne({
-            where: {
-                id,
-                user: { email: userEmail },
-            },
-            relations: ["category"],
+            where: { id },
+            relations: ["category", "user"],
         });
     }
 

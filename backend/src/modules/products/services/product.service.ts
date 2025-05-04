@@ -83,8 +83,7 @@ export class ProductService {
         name: string,
         categoryId: number,
         price: number,
-        quantity: number,
-        userEmail: string
+        quantity: number
     ): Promise<ProductResult> {
         const validationErrors = await validateProductFields(
             name,
@@ -103,9 +102,9 @@ export class ProductService {
             return { notFound: "Category not found" };
         }
 
-        const product = await this.productRepository.findOneById(id, userEmail);
+        const product = await this.productRepository.findOneById(id);
         if (!product) {
-            return { notFound: "Product not found or not owned by user" };
+            return { notFound: "Product not found" };
         }
 
         product.name = name;
@@ -117,13 +116,10 @@ export class ProductService {
         return { product: updatedProduct };
     }
 
-    async deleteProduct(
-        id: number,
-        userEmail: string
-    ): Promise<{ notFound?: string }> {
-        const product = await this.productRepository.findOneById(id, userEmail);
+    async deleteProduct(id: number): Promise<{ notFound?: string }> {
+        const product = await this.productRepository.findOneById(id);
         if (!product) {
-            return { notFound: "Product not found or not owned by user" };
+            return { notFound: "Product not found" };
         }
 
         await this.productRepository.delete(id);

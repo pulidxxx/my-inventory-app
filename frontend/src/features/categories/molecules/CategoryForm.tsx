@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import { Input } from "../../../components/atoms/Input";
 import { Button } from "../../../components/atoms/Button";
-import { FaPlusCircle, FaArrowLeft } from "react-icons/fa";
+import {
+    FaPlusCircle,
+    FaArrowLeft,
+    FaCheckCircle,
+    FaTimesCircle,
+} from "react-icons/fa";
 import { createCategory } from "../../../services/categories";
 import { Link } from "react-router-dom";
 
 interface CategoryFormProps {
     onCategoryCreated: () => void;
+    onShowModal: (
+        title: string,
+        message: string,
+        icon: React.ReactNode
+    ) => void;
 }
 
 export const CategoryForm: React.FC<CategoryFormProps> = ({
     onCategoryCreated,
+    onShowModal,
 }) => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -42,11 +53,25 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
-        await createCategory(name, description);
-        setName("");
-        setDescription("");
-        setErrors({});
-        onCategoryCreated();
+        try {
+            await createCategory(name, description);
+            setName("");
+            setDescription("");
+            setErrors({});
+            onCategoryCreated();
+            onShowModal(
+                "Éxito",
+                "Categoría creado correctamente.",
+                <FaCheckCircle className="w-12 h-12 text-sky-400 dark:text-white" />
+            );
+        } catch (error) {
+            console.error("Error creating category:", error);
+            onShowModal(
+                "Error",
+                "Revisa si tu categoria ya existe.",
+                <FaTimesCircle className="w-12 h-12 text-red-500 dark:text-white" />
+            );
+        }
     };
 
     return (

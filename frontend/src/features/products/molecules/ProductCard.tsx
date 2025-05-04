@@ -89,11 +89,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onProductUpdated();
         } catch (error) {
             console.error("Error actualizando el producto", error);
-            onShowModal(
-                "Error",
-                "Error al actualizar el producto.",
-                <FaTimesCircle className="w-12 h-12 text-red-500 dark:text-white" />
-            );
+            throw error;
         }
     };
 
