@@ -1,6 +1,6 @@
 import React from "react";
-import { RegisterForm } from "../components/molecules/RegisterForm";
-import { AuthTemplate } from "../components/templates/AuthTemplate";
+import { RegisterForm } from "../features/auth/molecules/RegisterForm";
+import { AuthTemplate } from "../features/auth/templates/AuthTemplate";
 import { ThemeToggle } from "../components/atoms/ThemeToggle";
 
 export const RegisterPage: React.FC = () => (

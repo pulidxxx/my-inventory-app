@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../app";
 import { AppDataSource } from "../ormconfig";
 import { User } from "../entities/User";
-
+import { Product } from "../entities/Product";
 describe("Auth API Routes", () => {
     const testUser = {
         email: "testuser@example.com",
@@ -19,6 +19,9 @@ describe("Auth API Routes", () => {
     afterAll(async () => {
         if (AppDataSource.isInitialized) {
             const userRepository = AppDataSource.getRepository(User);
+            await AppDataSource.getRepository(Product).delete({
+                user: { email: testUser.email },
+            });
             await userRepository.delete({ email: testUser.email });
             await AppDataSource.destroy();
         }
@@ -36,7 +39,9 @@ describe("Auth API Routes", () => {
                 .send(testUser);
 
             expect(response.status).toBe(201);
-            expect(response.text).toBe("User registered successfully");
+            expect(response.text).toBe(
+                `{"message":"User registered successfully","email":"${testUser.email}"}`
+            );
 
             const user = await AppDataSource.getRepository(User).findOne({
                 where: { email: testUser.email },
@@ -65,7 +70,7 @@ describe("Auth API Routes", () => {
                 .send(testUser);
 
             expect(response.status).toBe(400);
-            expect(response.text).toBe("Error registering user");
+            expect(response.text).toBe('{"errors":["Error registering user"]}');
         });
     });
 
@@ -105,7 +110,7 @@ describe("Auth API Routes", () => {
                 });
 
             expect(response.status).toBe(400);
-            expect(response.text).toBe("Invalid credentials");
+            expect(response.text).toBe('{"errors":["Invalid credentials"]}');
         });
 
         it("should return 400 for missing email", async () => {
@@ -157,7 +162,9 @@ describe("Auth API Routes", () => {
                 .send({});
 
             expect(response.status).toBe(401);
-            expect(response.text).toBe("Refresh token is required");
+            expect(response.text).toBe(
+                '{"message":"Refresh token is required"}'
+            );
         });
 
         it("should return 403 for invalid refresh token", async () => {
@@ -166,7 +173,7 @@ describe("Auth API Routes", () => {
                 .send({ token: "invalid-token" });
 
             expect(response.status).toBe(403);
-            expect(response.text).toBe("Invalid refresh, please login again");
+            expect(response.text).toBe('{"message":"Invalid refresh token"}');
         });
     });
 });

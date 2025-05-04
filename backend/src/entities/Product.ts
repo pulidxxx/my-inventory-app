@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
 } from "typeorm";
 import { User } from "./User";
+import { Category } from "./Category";
 
 @Entity()
 export class Product {
@@ -15,8 +16,8 @@ export class Product {
     @Column({ unique: true })
     name!: string;
 
-    @Column()
-    category!: string;
+    @ManyToOne(() => Category, (category) => category.products)
+    category!: Category;
 
     @Column("decimal", { precision: 10, scale: 2 })
     price!: number;

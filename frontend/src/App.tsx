@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
-import { DashboardPage } from "./pages/DashboardPage";
+import { DashboardProductPage } from "./pages/DashboardProductPage";
+import { DashboardCategoryPage } from "./pages/DashboardCategoryPage";
 import { Modal } from "./components/atoms/Modal";
 
 const App: React.FC = () => {
@@ -45,14 +46,28 @@ const App: React.FC = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route
-                    path="/dashboard"
+                    path="/dashboard/products"
                     element={
                         localStorage.getItem("accessToken") ? (
-                            <DashboardPage />
+                            <DashboardProductPage />
                         ) : (
                             <Navigate to="/login" />
                         )
                     }
+                />
+                <Route
+                    path="/dashboard/categories"
+                    element={
+                        localStorage.getItem("accessToken") ? (
+                            <DashboardCategoryPage />
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    }
+                />
+                <Route
+                    path="/dashboard"
+                    element={<Navigate to="/dashboard/products" />}
                 />
                 <Route path="/" element={<Navigate to="/login" />} />
             </Routes>

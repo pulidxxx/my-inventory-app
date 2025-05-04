@@ -44,31 +44,71 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export const getProducts = async () => {
+interface Category {
+    id: number;
+    name: string;
+}
+
+interface User {
+    username: string;
+    email: string;
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    price: string;
+    quantity: number;
+    category: Category;
+    user: User;
+    createdAt: string;
+}
+
+export const getProducts = async (): Promise<Product[]> => {
     const response = await axiosInstance.get(API_BASE_URL);
-    return response.data;
+    return response.data.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        category: {
+            id: product.category.id,
+            name: product.category.name,
+        },
+        user: {
+            username: product.user.username,
+            email: product.user.email,
+        },
+        createdAt: product.createdAt,
+    }));
 };
 
 export const createProduct = async (
     name: string,
-    category: string,
+    categoryId: number,
     price: number,
     quantity: number
-) => {
+): Promise<Product> => {
     try {
         const response = await axiosInstance.post(API_BASE_URL, {
             name,
-            category,
+            categoryId,
             price,
             quantity,
         });
-        return response.data;
+        return {
+            ...response.data,
+            category: {
+                id: response.data.category.id,
+                name: response.data.category.name,
+            },
+            user: {
+                username: response.data.user.username,
+                email: response.data.user.email,
+            },
+        };
     } catch (error: unknown) {
-        if (
-            axios.isAxiosError(error) &&
-            error.response &&
-            error.response.data
-        ) {
+        if (axios.isAxiosError(error) && error.response?.data) {
             throw new Error(
                 error.response.data.message || "Error al crear el producto."
             );
@@ -80,24 +120,30 @@ export const createProduct = async (
 export const updateProduct = async (
     id: number,
     name: string,
-    category: string,
+    categoryId: number,
     price: number,
     quantity: number
-) => {
+): Promise<Product> => {
     try {
         const response = await axiosInstance.put(`${API_BASE_URL}/${id}`, {
             name,
-            category,
+            categoryId,
             price,
             quantity,
         });
-        return response.data;
+        return {
+            ...response.data,
+            category: {
+                id: response.data.category.id,
+                name: response.data.category.name,
+            },
+            user: {
+                username: response.data.user.username,
+                email: response.data.user.email,
+            },
+        };
     } catch (error: unknown) {
-        if (
-            axios.isAxiosError(error) &&
-            error.response &&
-            error.response.data
-        ) {
+        if (axios.isAxiosError(error) && error.response?.data) {
             throw new Error(
                 error.response.data.message || "Error al actualizar el producto"
             );
@@ -106,6 +152,6 @@ export const updateProduct = async (
     }
 };
 
-export const deleteProduct = async (id: number) => {
+export const deleteProduct = async (id: number): Promise<void> => {
     await axiosInstance.delete(`${API_BASE_URL}/${id}`);
 };

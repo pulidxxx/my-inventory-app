@@ -1,10 +1,10 @@
 import express from "express";
-import { register, login, refreshToken } from "../modules/auth/auth.controller";
+import { authController } from "../modules/auth/controllers/auth.controller.index";
 
 const router = express.Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.post("/refresh-token", refreshToken);
+router.post("/register", authController.register.bind(authController));
+router.post("/login", authController.login.bind(authController));
+router.post("/refresh-token", authController.refreshToken.bind(authController));
 
 export default router;
