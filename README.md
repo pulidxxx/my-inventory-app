@@ -31,7 +31,7 @@ Asegúrate de crear una base de datos en postgres con el mismo nombre especifica
 ```bash
 cd backend
 npm install
-npm run start
+npm run dev
 ```
 
 #### Iniciar el Frontend:
