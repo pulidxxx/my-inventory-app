@@ -3,6 +3,7 @@ import { app } from "../app";
 import { AppDataSource } from "../ormconfig";
 import { User } from "../entities/User";
 import { Product } from "../entities/Product";
+
 describe("Auth API Routes", () => {
     const testUser = {
         email: "testuser@example.com",
@@ -18,19 +19,35 @@ describe("Auth API Routes", () => {
 
     afterAll(async () => {
         if (AppDataSource.isInitialized) {
-            const userRepository = AppDataSource.getRepository(User);
-            await AppDataSource.getRepository(Product).delete({
-                user: { email: testUser.email },
-            });
-            await userRepository.delete({ email: testUser.email });
+            await AppDataSource.getRepository(Product)
+                .createQueryBuilder()
+                .delete()
+                .where("userEmail = :email", { email: testUser.email })
+                .execute();
+
+            await AppDataSource.getRepository(User)
+                .createQueryBuilder()
+                .delete()
+                .where("email = :email", { email: testUser.email })
+                .execute();
+
             await AppDataSource.destroy();
         }
     });
 
     describe("POST /api/v1/auth/register", () => {
         afterEach(async () => {
-            const userRepository = AppDataSource.getRepository(User);
-            await userRepository.delete({ email: testUser.email });
+            await AppDataSource.getRepository(Product)
+                .createQueryBuilder()
+                .delete()
+                .where("userEmail = :email", { email: testUser.email })
+                .execute();
+
+            await AppDataSource.getRepository(User)
+                .createQueryBuilder()
+                .delete()
+                .where("email = :email", { email: testUser.email })
+                .execute();
         });
 
         it("should register a new user successfully", async () => {
@@ -39,9 +56,10 @@ describe("Auth API Routes", () => {
                 .send(testUser);
 
             expect(response.status).toBe(201);
-            expect(response.text).toBe(
-                `{"message":"User registered successfully","email":"${testUser.email}"}`
-            );
+            expect(response.body).toEqual({
+                message: "User registered successfully",
+                email: testUser.email,
+            });
 
             const user = await AppDataSource.getRepository(User).findOne({
                 where: { email: testUser.email },
@@ -70,7 +88,9 @@ describe("Auth API Routes", () => {
                 .send(testUser);
 
             expect(response.status).toBe(400);
-            expect(response.text).toBe('{"errors":["Error registering user"]}');
+            expect(response.body).toEqual({
+                errors: ["Error registering user"],
+            });
         });
     });
 
@@ -80,9 +100,17 @@ describe("Auth API Routes", () => {
         });
 
         afterAll(async () => {
-            await AppDataSource.getRepository(User).delete({
-                email: testUser.email,
-            });
+            await AppDataSource.getRepository(Product)
+                .createQueryBuilder()
+                .delete()
+                .where("userEmail = :email", { email: testUser.email })
+                .execute();
+
+            await AppDataSource.getRepository(User)
+                .createQueryBuilder()
+                .delete()
+                .where("email = :email", { email: testUser.email })
+                .execute();
         });
 
         it("should login successfully with valid credentials", async () => {
@@ -110,7 +138,7 @@ describe("Auth API Routes", () => {
                 });
 
             expect(response.status).toBe(400);
-            expect(response.text).toBe('{"errors":["Invalid credentials"]}');
+            expect(response.body).toEqual({ errors: ["Invalid credentials"] });
         });
 
         it("should return 400 for missing email", async () => {
@@ -140,9 +168,17 @@ describe("Auth API Routes", () => {
         });
 
         afterAll(async () => {
-            await AppDataSource.getRepository(User).delete({
-                email: testUser.email,
-            });
+            await AppDataSource.getRepository(Product)
+                .createQueryBuilder()
+                .delete()
+                .where("userEmail = :email", { email: testUser.email })
+                .execute();
+
+            await AppDataSource.getRepository(User)
+                .createQueryBuilder()
+                .delete()
+                .where("email = :email", { email: testUser.email })
+                .execute();
         });
 
         it("should return new access token with valid refresh token", async () => {
@@ -162,9 +198,9 @@ describe("Auth API Routes", () => {
                 .send({});
 
             expect(response.status).toBe(401);
-            expect(response.text).toBe(
-                '{"message":"Refresh token is required"}'
-            );
+            expect(response.body).toEqual({
+                message: "Refresh token is required",
+            });
         });
 
         it("should return 403 for invalid refresh token", async () => {
@@ -173,7 +209,9 @@ describe("Auth API Routes", () => {
                 .send({ token: "invalid-token" });
 
             expect(response.status).toBe(403);
-            expect(response.text).toBe('{"message":"Invalid refresh token"}');
+            expect(response.body).toEqual({
+                message: "Invalid refresh token",
+            });
         });
     });
 });

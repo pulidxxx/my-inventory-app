@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemeToggle Component matches snapshot in dark mode 1`] = `
+<DocumentFragment>
+  <label
+    class="inline-flex items-center cursor-pointer fixed bottom-4 right-4 z-50"
+  >
+    <input
+      checked=""
+      class="sr-only peer"
+      type="checkbox"
+    />
+    <div
+      class="relative w-11 h-6 bg-sky-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"
+    />
+    <span
+      class="ms-3 text-sm font-medium text-sky-400 dark:text-gray-300"
+    >
+      Modo oscuro
+    </span>
+  </label>
+</DocumentFragment>
+`;
+
+exports[`ThemeToggle Component matches snapshot in light mode 1`] = `
+<DocumentFragment>
+  <label
+    class="inline-flex items-center cursor-pointer fixed bottom-4 right-4 z-50"
+  >
+    <input
+      class="sr-only peer"
+      type="checkbox"
+    />
+    <div
+      class="relative w-11 h-6 bg-sky-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"
+    />
+    <span
+      class="ms-3 text-sm font-medium text-sky-400 dark:text-gray-300"
+    >
+      Modo claro
+    </span>
+  </label>
+</DocumentFragment>
+`;
