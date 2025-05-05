@@ -63,7 +63,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
             console.error("Error al eliminar la categoría", error);
             onShowModal(
                 "Error",
-                "No se pudo eliminar la categoría.",
+                "No se pudo eliminar la categoría. Primero verifica que no tenga productos asociados.",
                 <FaTimesCircle className="w-12 h-12 text-red-500 dark:text-white" />
             );
         }
