@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
-import { User } from "../src/entities/User";
-import { Product } from "../src/entities/Product";
-import { Category } from "../src/entities/Category";
+import { User } from "./entities/User";
+import { Product } from "./entities/Product";
+import { Category } from "./entities/Category";
 import dotenv from "dotenv";
 
 dotenv.config();
