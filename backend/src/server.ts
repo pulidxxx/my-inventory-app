@@ -1,7 +1,7 @@
 import { app } from "./app";
 import { AppDataSource } from "./ormconfig";
 
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
     try {
