@@ -1,7 +1,7 @@
 import axios from "axios";
 import { refreshToken } from "./auth";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL + "api/v1/categories";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL + "/api/v1/categories";
 
 const axiosInstance = axios.create();
 
